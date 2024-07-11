@@ -8,3 +8,6 @@
   1. In the Kaggle, select ``File`` > ``Import Notebook`` > ``GitHub`` > type ``gabszap/SD-with-gdrive`` and choose the my notebook (*.ipynb extension)
   2. You need a ``ngrok token``, get it from [here](https://dashboard.ngrok.com/get-started/your-authtoken). You need register it first.
   3. [zrok](https://github.com/DEX-1101/sd-webui-notebook?tab=readme-ov-file#how-to-useregister-zrok-tunnel) alternative
+
+ # How to get the credentials for the code
+ - Coming soon
