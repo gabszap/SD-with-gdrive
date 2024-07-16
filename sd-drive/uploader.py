@@ -1,16 +1,12 @@
+import os
 from pathlib import Path
-import gradio as gr
-import subprocess, re, sys
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-from sd_hub.paths import hub_path
-from sd_hub.version import xyz
 
-# Função para autenticar no Google Drive
 def authenticate_google_drive():
     SCOPES = ['https://www.googleapis.com/auth/drive.file']
     creds = None
@@ -30,7 +26,7 @@ def authenticate_google_drive():
     
     return build('drive', 'v3', credentials=creds)
 
-# Função para enviar um arquivo ao Google Drive
+
 def upload_to_drive(service, file_path, file_name, folder_id=None):
     file_metadata = {'name': file_name}
     if folder_id:
@@ -40,7 +36,7 @@ def upload_to_drive(service, file_path, file_name, folder_id=None):
     file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
     print(f"File ID: {file.get('id')}")
 
-# Função de upload modificada para Google Drive
+
 def push_push(file_path, file_name):
     service = authenticate_google_drive()
     upload_to_drive(service, file_path, file_name)
@@ -52,7 +48,6 @@ def up_up(inputs):
         yield "Missing: [ Input ]", True
         return
 
-    tag_tag = hub_path()
     task_task = []
 
     for line in input_lines:
@@ -80,13 +75,6 @@ def up_up(inputs):
                 return
 
         full_path = Path(input_path) if not input_path.startswith('$') else None
-        if input_path.startswith('$'):
-            tag_key, _, subpath_or_file = input_path[1:].partition('/')
-            resolved_path = tag_tag.get(tag_key)
-            if resolved_path is None:
-                yield f"{tag_key}\nInvalid tag.", True
-                return
-            full_path = Path(resolved_path, subpath_or_file)
 
         if full_path:
             if full_path.is_file():
@@ -113,7 +101,7 @@ def up_up(inputs):
         except Exception as e:
             yield f"Error uploading {file_name}: {str(e)}", True
 
-def uploader(inputs, box_state=gr.State()):
+def uploader(inputs, box_state=[]):
     output_box = box_state if box_state else []
 
     for _text, _flag in up_up(inputs):
@@ -131,4 +119,4 @@ def uploader(inputs, box_state=gr.State()):
     else:
         yield "Done", "\n".join(output_box)
         
-    return gr.update(), gr.State(output_box)
+    return output_box
